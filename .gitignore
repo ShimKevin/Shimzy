@@ -3,10 +3,6 @@
 .env.*
 !.env.example  # Keep template file
 
-# Render config
-render.yaml
-render*.yaml
-
 # Database and instance files
 instance/
 *.db
