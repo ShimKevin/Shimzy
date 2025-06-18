@@ -1,6 +1,5 @@
 services:
   - type: web
-    name: your-app
     runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --workers 4
+    buildCommand: "poetry install --no-dev"
+    startCommand: "poetry run gunicorn --workers 4 --worker-class gevent --bind 0.0.0.0:$PORT app:app"
