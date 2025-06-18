@@ -1,7 +1,7 @@
 services:
   - type: web
     name: shimzy
-    runtime: python
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
     pythonVersion: 3.11.9
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class eventlet -w 1 app:app
