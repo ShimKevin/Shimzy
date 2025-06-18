@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: shimzy
+    runtime: python
+    pythonVersion: 3.11.9
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --worker-class eventlet -w 1 app:app
