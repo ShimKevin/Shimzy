@@ -1,7 +1,6 @@
 services:
   - type: web
-    name: shimzy
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python app.py"
-    pythonVersion: 3.11.9
+    name: your-app
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 4
