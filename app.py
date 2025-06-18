@@ -279,17 +279,22 @@ def handle_ice_candidate(data):
 if __name__ == '__main__':
     create_tables()
     
-    if os.getenv('FLASK_ENV') == 'production':
+    if os.getenv('RENDER'):  # Running on Render
+        port = int(os.environ.get('PORT', 10000))
+        # Production mode with Gunicorn+eventlet
+        socketio.run(app, host='0.0.0.0', port=port)
+    elif os.getenv('FLASK_ENV') == 'production':
+        # SSL-enabled production (non-Render)
         import eventlet
         from eventlet import wsgi
-        from eventlet import wrap_ssl
-        
         socket = eventlet.listen(('0.0.0.0', int(os.getenv('PORT', 5000))))
-        socket = wrap_ssl(socket, 
-                         certfile='fullchain.pem',
-                         keyfile='privkey.pem',
-                         server_side=True)
-        
+        if os.path.exists('fullchain.pem') and os.path.exists('privkey.pem'):
+            from eventlet import wrap_ssl
+            socket = wrap_ssl(socket,
+                            certfile='fullchain.pem',
+                            keyfile='privkey.pem',
+                            server_side=True)
         wsgi.server(socket, app)
     else:
+        # Development mode
         socketio.run(app, debug=True)

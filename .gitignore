@@ -1,14 +1,27 @@
-# Secrets
+# Environment variables
 .env
-*.env
+.env.*
+!.env.example  # Keep template file
+
+# Render config
+render.yaml
+render*.yaml
+
+# Database and instance files
 instance/
 *.db
 *.sqlite
+*.sqlite3
+
+# SSL certificates
+*.pem
+*.key
+*.crt
 
 # Python
-venv/
 __pycache__/
-*.pyc
+*.py[cod]
+venv/
 
 # System files
 .DS_Store
