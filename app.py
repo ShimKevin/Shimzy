@@ -47,7 +47,7 @@ app.config['FERNET_KEY'] = fernet_key
 # Initialize extensions
 db.init_app(app)
 mail = Mail(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='gevent', cors_allowed_origins="*")  # Updated for gevent
 
 # Flask-Login setup
 login_manager = LoginManager(app)
@@ -279,22 +279,11 @@ def handle_ice_candidate(data):
 if __name__ == '__main__':
     create_tables()
     
-    if os.getenv('RENDER'):  # Running on Render
+    if os.getenv('RENDER'):
         port = int(os.environ.get('PORT', 10000))
-        # Production mode with Gunicorn+eventlet
         socketio.run(app, host='0.0.0.0', port=port)
     elif os.getenv('FLASK_ENV') == 'production':
-        # SSL-enabled production (non-Render)
-        import eventlet
-        from eventlet import wsgi
-        socket = eventlet.listen(('0.0.0.0', int(os.getenv('PORT', 5000))))
-        if os.path.exists('fullchain.pem') and os.path.exists('privkey.pem'):
-            from eventlet import wrap_ssl
-            socket = wrap_ssl(socket,
-                            certfile='fullchain.pem',
-                            keyfile='privkey.pem',
-                            server_side=True)
-        wsgi.server(socket, app)
+        port = int(os.getenv('PORT', 5000))
+        socketio.run(app, host='0.0.0.0', port=port)
     else:
-        # Development mode
         socketio.run(app, debug=True)
