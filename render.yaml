@@ -1,5 +1,10 @@
 services:
   - type: web
+    name: shimzy
     runtime: python
     buildCommand: "poetry install --no-dev"
-    startCommand: "poetry run gunicorn --workers 4 --worker-class gevent --bind 0.0.0.0:$PORT app:app"
+    startCommand: "poetry run gunicorn --worker-class gevent --workers 4 --bind 0.0.0.0:$PORT app:app"
+    envVars:
+      FLASK_ENV: production
+      FERNET_KEY: ${FERNET_KEY}  # Set this in Render's dashboard
+

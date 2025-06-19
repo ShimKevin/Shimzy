@@ -1,18 +1,21 @@
 [tool.poetry]
-name = "shimzy" 
-version = "0.1.0" 
+name = "shimzy"
+version = "0.1.0"
 description = "Chat application"
 authors = ["Shim Kevin <shim70497@email.com>"]
-package-mode = false
+package-mode = false  # Critical for application projects
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.12"  # Strict Python 3.12 requirement
 flask = "2.3.2"
-werkzeug = "2.3.7"  # Explicitly pinned version
-gevent = "^25.5.1"
+werkzeug = "2.3.7"  # Required for Flask-Login compatibility
+gevent = "^25.5.1"  # Modern version with Python 3.13 support
 gunicorn = "*"
-flask-socketio = "*"
+flask-socketio = "5.3.6"  # Pinned to stable version
 flask-login = "0.6.2"
+flask-talisman = "1.1.0"  # Added for security
+flask-limiter = "3.4.0"  # Added for rate limiting
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
+pytest-cov = "*"  
